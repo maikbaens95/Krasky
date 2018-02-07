@@ -256,6 +256,7 @@ MonoBehaviour:
     type: 2}
   puesto_bala_turret: {fileID: 1402005068044264}
   turret: {fileID: 1602707386992106}
+  camera: {fileID: 0}
 --- !u!114 &114745922971119800
 MonoBehaviour:
   m_ObjectHideFlags: 1

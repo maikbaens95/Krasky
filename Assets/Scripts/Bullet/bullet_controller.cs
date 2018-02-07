@@ -10,6 +10,9 @@ public class bullet_controller : MonoBehaviour {
     private GameObject bullet_explosion_prefab;
     private Rigidbody2D _rb;
 
+    private bool coroutine;
+    private bool disapear = false;
+
 	// Use this for initialization
 	void Start () {
         _rb = GetComponent<Rigidbody2D>();
@@ -18,6 +21,10 @@ public class bullet_controller : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         _rb.velocity = transform.right * bullet_speed;
+        if (!coroutine)
+            StartCoroutine(UsingYield(5.0f));
+        if(disapear)
+            Destroy(this.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -27,5 +34,13 @@ public class bullet_controller : MonoBehaviour {
         GameObject disparo_bala = Instantiate(bullet_explosion_prefab, contact_position,Quaternion.identity);
         Destroy(this.gameObject);
     }
+    
 
+    IEnumerator UsingYield(float seconds)
+    {
+        coroutine = true;
+        yield return new WaitForSeconds(seconds);
+        disapear = true;
+        coroutine = false;
+    }
 }
