@@ -16,6 +16,10 @@ public class Weapon_turret : MonoBehaviour
 
     private bool rafaga;
     private bool can_shoot;
+    [SerializeField]
+    private float vida_max;
+    private float vida;
+    private bool alive;
 
     private bool coroutineStarted;
 
@@ -24,22 +28,48 @@ public class Weapon_turret : MonoBehaviour
     {
         can_shoot = true;
         coroutineStarted = false;
+        vida = vida_max;
+        alive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 screenPoint = camera.WorldToViewportPoint(this.transform.position);
-        bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
-        if (onScreen)
+        if (alive)
         {
-            if (can_shoot)
+            if (vida <= 0.0f)
             {
-                can_shoot = false;
-                GameObject disparo_bala_turret = Instantiate(bala_turret_prefab, puesto_bala_turret.transform.position, Quaternion.identity);
-                disparo_bala_turret.transform.Rotate(0, 0, turret.transform.eulerAngles.z);
-                if (!coroutineStarted)
-                    StartCoroutine(UsingYield(0.5f));
+                alive = false;
+            }
+            else
+            {
+                Vector3 screenPoint = camera.WorldToViewportPoint(this.transform.position);
+                bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+                if (onScreen)
+                {
+                    if (can_shoot)
+                    {
+                        can_shoot = false;
+                        GameObject disparo_bala_turret = Instantiate(bala_turret_prefab, puesto_bala_turret.transform.position, Quaternion.identity);
+                        disparo_bala_turret.transform.Rotate(0, 0, turret.transform.eulerAngles.z);
+                        if (!coroutineStarted)
+                            StartCoroutine(UsingYield(0.5f));
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (alive)
+        {
+            if (collision.collider.tag == "bullet")
+            {
+                if (vida > 0)
+                {
+                    vida -= 25.0f;
+                }
             }
         }
     }
@@ -52,5 +82,10 @@ public class Weapon_turret : MonoBehaviour
         can_shoot = true;
 
         coroutineStarted = false;
+    }
+
+    public bool getAlive()
+    {
+        return alive;
     }
 }

@@ -15,19 +15,38 @@ public class Turret_controller : MonoBehaviour {
 
     [SerializeField]
     private Transform _player;
-    
+    private Weapon_turret weapon_script;
+    [SerializeField]
+    private GameObject smoke;
+    private ParticleSystem _ps;
+
+    private bool not_enter;
+
 
     // Use this for initialization
     void Start()
     {
+        _ps = smoke.GetComponent<ParticleSystem>();
+        weapon_script = GetComponent<Weapon_turret>();
+        not_enter = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var angle = Angle1(transform.position, _player.position);
-        var quat = Quaternion.AngleAxis(angle - 90, Vector3.back);
-        
-        transform.rotation = quat;
+        if (!not_enter)
+        {
+            if (weapon_script.getAlive())
+            {
+                var angle = Angle1(transform.position, _player.position);
+                var quat = Quaternion.AngleAxis(angle - 90, Vector3.back);
+                transform.rotation = quat;
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, -45);
+                _ps.Play();
+            }
+        }
     }
 }
