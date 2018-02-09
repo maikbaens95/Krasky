@@ -9,6 +9,8 @@ TagManager:
   - bullet
   - rojo
   - verde
+  - Laser
+  - botiquin
   layers:
   - Default
   - TransparentFX

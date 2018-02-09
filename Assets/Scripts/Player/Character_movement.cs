@@ -6,15 +6,17 @@ public class Character_movement : MonoBehaviour {
 
     public float speed = 5.0f;
     public float jump = 5.0f;
+    public float floor;
 
     private Rigidbody2D _rb;
     private bool ceiling_walk = false;
     private bool walk_left = false;
     private bool botas_magneticas = false;
-
+    
 	// Use this for initialization
 	void Start () {
         _rb = GetComponent<Rigidbody2D>();
+        floor = 1.0f;
 	}
 	
 	// Update is called once per frame
@@ -106,5 +108,15 @@ public class Character_movement : MonoBehaviour {
     public bool getwalking_terrain()
     {
         return ceiling_walk;
+    }
+
+    public void setfloor(float f)
+    {
+        floor = f;
+    }
+
+    public float getfloor()
+    {
+        return floor;
     }
 }
